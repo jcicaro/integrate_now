@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="HTTP Substitution" max_length="40" name="x_9260_intnow_http_substitution" type="collection">
+        <element label="HTTP request" max_length="32" name="http_request" reference="x_9260_intnow_http_request" type="reference"/>
+        <element label="Property name" max_length="200" name="property_name" type="string"/>
+        <element label="Property value" max_length="10000" name="property_value" type="string"/>
+        <index name="index">
+            <element name="http_request"/>
+        </index>
+    </element>
+</database>

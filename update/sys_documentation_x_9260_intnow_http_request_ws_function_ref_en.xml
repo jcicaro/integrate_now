@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_documentation element="ws_function_ref" label="WS function ref" language="en" table="x_9260_intnow_http_request">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>ws_function_ref</element>
+            <help/>
+            <hint/>
+            <label>WS function ref</label>
+            <language>en</language>
+            <name>x_9260_intnow_http_request</name>
+            <plural>WS function refs</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>xJuanCarlo.Icaro</sys_created_by>
+            <sys_created_on>2018-03-13 10:19:48</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_id>86ffb3b1db3cd70012b2f00fbf961976</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>WS function ref</sys_name>
+            <sys_package display_value="IntegrateNow" source="x_9260_intnow">00853739dbf8d70012b2f00fbf9619a0</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="IntegrateNow">00853739dbf8d70012b2f00fbf9619a0</sys_scope>
+            <sys_update_name>sys_documentation_x_9260_intnow_http_request_ws_function_ref_en</sys_update_name>
+            <sys_updated_by>xJuanCarlo.Icaro</sys_updated_by>
+            <sys_updated_on>2018-03-13 10:19:48</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>
