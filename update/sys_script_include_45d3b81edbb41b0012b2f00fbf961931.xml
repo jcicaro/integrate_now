@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_9260_intnow.IntegrateNowUtil</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>IntegrateNowUtil</name>
+        <script><![CDATA[var IntegrateNowUtil = Class.create();
+IntegrateNowUtil.prototype = {
+    initialize: function () {
+    },
+
+    evaluateParameterScript: function (current, webServiceMap) {
+
+        if (!current || !webServiceMap) { return null; }
+
+        var evaluator = new GlideScopedEvaluator();
+        var evalVar = {
+            current: current,
+            webServiceMap: webServiceMap,
+            answer: null
+        };
+
+        evaluator.evaluateScript(webServiceMap, 'parameter_script', evalVar);
+
+        var answer = evaluator.getVariable('answer');
+        return answer;
+    },
+
+    removeHTMLTags: function (str) {
+        var regX = /(<([^>]+)>)/ig;
+        return str.replace(regX, "");
+    },
+
+    // === Value Checks ===
+
+    isFunction: function (obj) {
+        return !!(obj && obj.constructor && obj.call && obj.apply);
+    },
+
+    isArray: function (val) {
+        return Object.prototype.toString.call(val) === '[object Array]';
+    },
+
+    isObject: function(val) {
+        return (val !== null && typeof val === 'object');
+    },
+
+    // === Log ===
+
+    log: function (msg, logType) {
+        if (this.debug === false) {
+            return null;
+        } // exit
+
+        logType = logType || 'info';
+
+        if (!msg) {
+            gs.error(msg + '');
+            return null;
+        }
+
+        if (typeof msg === 'object' || this.INTUTIL._isArray(msg)) {
+            msg = JSON.stringify(msg);
+        }
+
+        gs[logType](msg);
+    },
+
+    type: 'IntegrateNowUtil'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>xJuanCarlo.Icaro</sys_created_by>
+        <sys_created_on>2018-03-14 08:45:34</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>45d3b81edbb41b0012b2f00fbf961931</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>IntegrateNowUtil</sys_name>
+        <sys_package display_value="IntegrateNow" source="x_9260_intnow">00853739dbf8d70012b2f00fbf9619a0</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="IntegrateNow">00853739dbf8d70012b2f00fbf9619a0</sys_scope>
+        <sys_update_name>sys_script_include_45d3b81edbb41b0012b2f00fbf961931</sys_update_name>
+        <sys_updated_by>xJuanCarlo.Icaro</sys_updated_by>
+        <sys_updated_on>2018-03-14 10:55:24</sys_updated_on>
+    </sys_script_include>
+</record_update>
