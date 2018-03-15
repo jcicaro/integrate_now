@@ -30,20 +30,8 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 	
-	var util = new x_9260_intnow.IntegrateNowUtil();
-
-	var gr = new GlideRecord('x_9260_intnow_web_service_map');
-	gr.addQuery('table', current.getTableName());
-	gr.addQuery('active', 'true');
-	gr.addQuery('on_insert', 'true');
-	gr.query();
-	while(gr.next()) {
-		var isInFilter = GlideFilter.checkRecord(current, gr.getValue('filter'));
-		if (isInFilter) {
-			var answer = util.evaluateParameterScript(current, gr);
-			gs.info(answer);
-		}
-	}
+	var util = new IntegrateNowUtil();
+	util.processBusinessRule(current, 'INSERT');
 
 })(current, previous);]]></script>
         <sys_class_name>sys_script</sys_class_name>
@@ -53,7 +41,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>41ac815edbf41b0012b2f00fbf9619cd</sys_id>
-        <sys_mod_count>15</sys_mod_count>
+        <sys_mod_count>21</sys_mod_count>
         <sys_name>IntegrateNow - Insert</sys_name>
         <sys_overrides/>
         <sys_package display_value="IntegrateNow" source="x_9260_intnow">00853739dbf8d70012b2f00fbf9619a0</sys_package>
@@ -62,9 +50,9 @@
         <sys_scope display_value="IntegrateNow">00853739dbf8d70012b2f00fbf9619a0</sys_scope>
         <sys_update_name>sys_script_41ac815edbf41b0012b2f00fbf9619cd</sys_update_name>
         <sys_updated_by>xJuanCarlo.Icaro</sys_updated_by>
-        <sys_updated_on>2018-03-14 10:57:51</sys_updated_on>
+        <sys_updated_on>2018-03-15 10:41:25</sys_updated_on>
         <template/>
-        <when>after</when>
+        <when>async</when>
     </sys_script>
     <sys_translated_text action="delete_multiple" query="documentkey=41ac815edbf41b0012b2f00fbf9619cd"/>
 </record_update>

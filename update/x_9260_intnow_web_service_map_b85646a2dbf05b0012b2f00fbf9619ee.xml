@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <record_update table="x_9260_intnow_web_service_map">
     <x_9260_intnow_web_service_map action="INSERT_OR_UPDATE">
-        <active>false</active>
-        <filter table="incident">active=true^EQ<item endquery="false" field="active" goto="false" newquery="false" operator="=" or="false" value="true"/>
-            <item endquery="true" field="" goto="false" newquery="false" operator="=" or="false" value=""/>
-        </filter>
-        <name>Update Issue</name>
+        <active>true</active>
+        <filter/>
+        <name>Demo</name>
         <on_insert>true</on_insert>
         <on_update>true</on_update>
         <parameter_script><![CDATA[answer = (function(current, webServiceMap) {
-	gs.info('inside parameter script...');
-	return 'Answer response...';
+	var answer = {};
+	
+	gs.info('inside parameter script: ' + current.number);
+	
+	answer.test = 'Answer...';
+	
+	return answer;
 })(current, webServiceMap);]]></parameter_script>
         <response_handler_script><![CDATA[(function(response, current, webServiceMap) {
-	gs.info('inside response handler script...');
+	var responseBody = JSON.parse(response.getBody());
+	var h = new x_9260_intnow.ResponseHandlerHelper();
+	
+	h.log('Status code: ' + response.getStatusCode());
+	h.log('Number: ' + responseBody.result[0].number);
+	
 })(response, current, webServiceMap);]]></response_handler_script>
         <sys_class_name>x_9260_intnow_web_service_map</sys_class_name>
         <sys_created_by>xJuanCarlo.Icaro</sys_created_by>
-        <sys_created_on>2018-03-14 09:51:06</sys_created_on>
+        <sys_created_on>2018-03-15 09:24:21</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
-        <sys_id>2cb24596dbf41b0012b2f00fbf9619c6</sys_id>
-        <sys_mod_count>21</sys_mod_count>
-        <sys_name>Update Issue</sys_name>
+        <sys_id>b85646a2dbf05b0012b2f00fbf9619ee</sys_id>
+        <sys_mod_count>42</sys_mod_count>
+        <sys_name>Demo</sys_name>
         <sys_package display_value="IntegrateNow" source="x_9260_intnow">00853739dbf8d70012b2f00fbf9619a0</sys_package>
         <sys_policy/>
         <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
         <sys_scope display_value="IntegrateNow">00853739dbf8d70012b2f00fbf9619a0</sys_scope>
-        <sys_update_name>x_9260_intnow_web_service_map_2cb24596dbf41b0012b2f00fbf9619c6</sys_update_name>
+        <sys_update_name>x_9260_intnow_web_service_map_b85646a2dbf05b0012b2f00fbf9619ee</sys_update_name>
         <sys_updated_by>xJuanCarlo.Icaro</sys_updated_by>
-        <sys_updated_on>2018-03-15 10:16:32</sys_updated_on>
+        <sys_updated_on>2018-03-15 21:50:12</sys_updated_on>
         <table>incident</table>
-        <ws_message display_value="(INTNOW) Jira Issue">f3997012dbf41b0012b2f00fbf961925</ws_message>
-        <ws_method display_value="Issue POST">89dabcdedbb41b0012b2f00fbf96194c</ws_method>
+        <ws_message display_value="(INTNOW) Loopback">a8fe2966dbb05b0012b2f00fbf96190d</ws_message>
+        <ws_method display_value="Default GET">841f25aedb705b0012b2f00fbf961989</ws_method>
     </x_9260_intnow_web_service_map>
 </record_update>

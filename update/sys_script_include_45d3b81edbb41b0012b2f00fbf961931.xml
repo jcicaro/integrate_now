@@ -10,11 +10,69 @@
         <script><![CDATA[var IntegrateNowUtil = Class.create();
 IntegrateNowUtil.prototype = {
     initialize: function () {
+        this.debug = true;
     },
 
-    evaluateParameterScript: function (current, webServiceMap) {
+    processBusinessRule: function (current, type) {
+        if (!type) {
+            return null;
+        }
+        var util = this;
+        var params = util.getParameterValuesFromScript(current, type);
+        util.log('params.length: ' + params.length);
+        params.forEach(function (param) {
+            var r = util.executeWebService(param);
+            var response = r.response;
+            var result = util.evaluateResponseHandlerScript(response,
+                current,
+                param.webServiceMap);
+        });
 
-        if (!current || !webServiceMap) { return null; }
+    },
+
+    executeWebService: function (param) {
+        if (!param) {
+            return null;
+        }
+
+        try {
+
+            var messageName = param.webServiceMap.ws_message.name + '';
+            var methodName = param.webServiceMap.ws_method.function_name + '';
+            var answer = this.isObject(param.answer) ? param.answer : {};
+
+            var r = new sn_ws.RESTMessageV2(messageName, methodName);
+
+            for (var i in answer) {
+                if (answer.hasOwnProperty(i)) {
+                    r.setStringParameter(i, answer[i]);
+                }
+            }
+
+            var response = r.execute();
+
+            //             var responseBody = response.getBody();
+            //             var httpStatus = response.getStatusCode();
+
+            var result = {
+                request: r,
+                response: response
+            };
+
+            return result;
+
+        } catch (error) {
+            this.log('Error in executeWebService...', 'error');
+            this.log(error, 'error');
+        }
+
+    },
+	
+	evaluateParameterScript: function (current, webServiceMap) {
+
+        if (!current || !webServiceMap) {
+            return null;
+        }
 
         var evaluator = new GlideScopedEvaluator();
         var evalVar = {
@@ -28,6 +86,69 @@ IntegrateNowUtil.prototype = {
         var answer = evaluator.getVariable('answer');
         return answer;
     },
+
+    evaluateResponseHandlerScript: function (response, current, webServiceMap) {
+
+        if (!response || !current || !webServiceMap) {
+            return null;
+        }
+
+        var evaluator = new GlideScopedEvaluator();
+        var evalVar = {
+            response: response,
+            current: current,
+            webServiceMap: webServiceMap,
+            answer: null
+        };
+
+        evaluator.evaluateScript(webServiceMap, 'response_handler_script', evalVar);
+
+        var answer = evaluator.getVariable('answer');
+        return answer; // just return an error if there's an error
+    },
+
+    getParameterValuesFromScript: function (current, type) {
+        if (!type) {
+            return null;
+        }
+
+        type = type.toUpperCase();
+
+        var params = [];
+
+        var util = this;
+
+        var gr = new GlideRecord('x_9260_intnow_web_service_map');
+        gr.addQuery('table', current.getTableName());
+        gr.addQuery('active', 'true');
+        if (type === 'INSERT') {
+            gr.addQuery('on_insert', 'true');
+        } else if (type === 'UPDATE') {
+            gr.addQuery('on_update', 'true');
+        } else {
+            return params;
+        }
+
+        gr.query();
+        while (gr.next()) {
+            var isInFilter = gr.getValue('filter') ?
+                GlideFilter.checkRecord(current, gr.getValue('filter')) : true;
+            if (isInFilter) {
+                var answer = util.evaluateParameterScript(current, gr);
+                var mapGr = new GlideRecord('x_9260_intnow_web_service_map');
+                mapGr.get(gr.getValue('sys_id'));
+                params.push({
+                    webServiceMap: mapGr,
+                    answer: answer
+                });
+            }
+        }
+
+        return params;
+
+    },
+
+    
 
     removeHTMLTags: function (str) {
         var regX = /(<([^>]+)>)/ig;
@@ -44,7 +165,7 @@ IntegrateNowUtil.prototype = {
         return Object.prototype.toString.call(val) === '[object Array]';
     },
 
-    isObject: function(val) {
+    isObject: function (val) {
         return (val !== null && typeof val === 'object');
     },
 
@@ -62,7 +183,7 @@ IntegrateNowUtil.prototype = {
             return null;
         }
 
-        if (typeof msg === 'object' || this.INTUTIL._isArray(msg)) {
+        if (this.isObject(msg) || this.isArray(msg)) {
             msg = JSON.stringify(msg);
         }
 
@@ -76,7 +197,7 @@ IntegrateNowUtil.prototype = {
         <sys_created_on>2018-03-14 08:45:34</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>45d3b81edbb41b0012b2f00fbf961931</sys_id>
-        <sys_mod_count>4</sys_mod_count>
+        <sys_mod_count>70</sys_mod_count>
         <sys_name>IntegrateNowUtil</sys_name>
         <sys_package display_value="IntegrateNow" source="x_9260_intnow">00853739dbf8d70012b2f00fbf9619a0</sys_package>
         <sys_policy>read</sys_policy>
@@ -84,6 +205,6 @@ IntegrateNowUtil.prototype = {
         <sys_scope display_value="IntegrateNow">00853739dbf8d70012b2f00fbf9619a0</sys_scope>
         <sys_update_name>sys_script_include_45d3b81edbb41b0012b2f00fbf961931</sys_update_name>
         <sys_updated_by>xJuanCarlo.Icaro</sys_updated_by>
-        <sys_updated_on>2018-03-14 10:55:24</sys_updated_on>
+        <sys_updated_on>2018-03-15 21:43:08</sys_updated_on>
     </sys_script_include>
 </record_update>
